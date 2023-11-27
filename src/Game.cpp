@@ -28,14 +28,15 @@ void Game::printBoard() {
     }
 }
 
-void Game::getMove(int column, int row) {
+bool Game::checkFieldAvailability(int column, int row) {
     int columnIndex = column-1;
     int rowIndex = row-1;
     if(checkRange(column, row)){
       if(board[columnIndex][rowIndex] == '.'){
-          //mark(columnIndex, rowIndex);
+          return true;
       }
     }
+        return false;
 }
 
 bool Game::checkRange(int column, int row) {
