@@ -13,7 +13,7 @@ private:
     char currentPlayer;
     void initializeBoard();
     bool checkRange(int column, int row);
-
+    void alternatePlayers();
 public:
     Game(int columns, int rows, char symbol1, char symbol2);
     void printBoard();

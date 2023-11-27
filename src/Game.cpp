@@ -44,3 +44,8 @@ bool Game::checkRange(int column, int row) {
     }
     return false;
 }
+
+void Game::alternatePlayers() {
+    if(currentPlayer == player1Symbol) currentPlayer = player2Symbol;
+    else currentPlayer = player1Symbol;
+}
