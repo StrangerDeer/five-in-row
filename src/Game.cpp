@@ -6,6 +6,7 @@ Game::Game(int columns, int rows, char symbol1, char symbol2) {
     numberOfRows = rows;
     player1Symbol = symbol1;
     player2Symbol = symbol2;
+    currentPlayer = player1Symbol;
     initializeBoard();
 }
 
@@ -26,6 +27,10 @@ void Game::printBoard() {
         }
         std::cout << std::endl;
     }
+}
+
+void Game::mark(int x, int y) {
+    board[x - 1][y - 1] = currentPlayer;
 }
 
 bool Game::checkFieldAvailability(int column, int row) {
