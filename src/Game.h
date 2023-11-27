@@ -18,7 +18,7 @@ private:
 public:
     Game(int columns, int rows, char symbol1, char symbol2);
     void printBoard();
-
+    void mark(int x, int y);
 };
 
 
