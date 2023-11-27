@@ -4,7 +4,7 @@
 using namespace std;
 
 int main() {
-    cout << "Hello, World!" << endl;
-    Game game;
+    Game game(5, 10);
+    game.printBoard();
     return 0;
 }
