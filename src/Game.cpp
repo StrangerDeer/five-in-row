@@ -20,7 +20,7 @@ void Game::initializeBoard() {
         board.push_back(row);
     }
 }
-//todo: rename this func
+
 void Game::printFirstLine(){
     std::cout << "    ";
     for(int i = 1; i <= numberOfColumns; i++){
