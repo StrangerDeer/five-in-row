@@ -18,16 +18,21 @@ private:
     char currentPlayer;
     char wonPlayerSymbol;
     void initializeBoard();
-    bool checkRange(int column, int row);
+    bool checkRange(int column, int row) const;
     void alternatePlayers();
     bool checkFieldAvailability(int column, int row);
+    void mark(int x, int y);
+    bool getCoordinatesFromInput(const string& coordinates);
+    void printBoard();
+    void getPlayerInput();
+    bool isFull();
     void setCheckerRange(int currentX, int currentY);
     bool hasRowFiveSameSymbol();
     bool hasWon(int currentX, int currentY);
-    void printBoard();
-    void mark(int x, int y);
 public:
     Game(int columns, int rows, char symbol1, char symbol2);
+    void run();
+
 };
 
 
