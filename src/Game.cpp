@@ -30,28 +30,66 @@ void Game::printBoard() {
 }
 
 void Game::mark(int x, int y) {
-    board[x - 1][y - 1] = currentPlayer;
+    board[y - 1][x - 1] = currentPlayer;
 }
 
 bool Game::checkFieldAvailability(int column, int row) {
     int columnIndex = column-1;
     int rowIndex = row-1;
     if(checkRange(column, row)){
-      if(board[columnIndex][rowIndex] == '.'){
+      if(board[rowIndex][columnIndex] == '.'){
           return true;
       }
     }
-        return false;
+    cout << "Coordinate is already taken" << endl;
+    return false;
 }
 
-bool Game::checkRange(int column, int row) {
+bool Game::checkRange(int column, int row) const {
     if(column <= numberOfColumns && column > 0 && row <= numberOfRows && row > 0){
         return true;
     }
+    cout << "Coordinate is out of board range" << endl;
     return false;
 }
 
 void Game::alternatePlayers() {
     if(currentPlayer == player1Symbol) currentPlayer = player2Symbol;
     else currentPlayer = player1Symbol;
+}
+
+bool Game::getCoordinatesFromInput(const string& coordinates) {
+    string::size_type loc = coordinates.find( '-', 0 );
+    if( loc != string::npos )
+    {
+        int coor1 = stoi(coordinates.substr(0, loc));
+        int coor2 = stoi(coordinates.substr (loc + 1));
+
+        if (checkRange(coor1, coor2) && checkFieldAvailability(coor1, coor2)) {
+            mark(coor1, coor2);
+            return true;
+        }
+    } else {
+        cout << "Invalid coordinates" << endl;
+    }
+    return false;
+}
+
+void Game::getPlayerInput() {
+    cout << "Coordinates: ";
+    string input;
+    cin >> input;
+    if (!getCoordinatesFromInput(input)) {
+        getPlayerInput();
+    }
+}
+
+void Game::run() {
+    bool isRunning = true;
+
+    while (isRunning) {
+        printBoard();
+        getPlayerInput();
+        alternatePlayers();
+    }
 }

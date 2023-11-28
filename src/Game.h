@@ -12,13 +12,16 @@ private:
     char player2Symbol;
     char currentPlayer;
     void initializeBoard();
-    bool checkRange(int column, int row);
+    bool checkRange(int column, int row) const;
     void alternatePlayers();
     bool checkFieldAvailability(int column, int row);
+    void mark(int x, int y);
+    bool getCoordinatesFromInput(const string& coordinates);
+    void printBoard();
+    void getPlayerInput();
 public:
     Game(int columns, int rows, char symbol1, char symbol2);
-    void printBoard();
-    void mark(int x, int y);
+    void run();
 };
 
 
