@@ -157,20 +157,29 @@ bool Game::hasRightDiagonalSameSymbol() {
         for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
             char currentCharacter = board[i][j];
             if (j+1 < maxColumnCoordinate && i+1 < maxRowCoordinate) {
-                char nextCharacter = board[i + 1][j + 1];
+                int num = 1;
+                char nextCharacter = board[i + num][j + num];
 
                 if (currentCharacter != emptyField) {
-                    if (currentCharacter == nextCharacter) {
+                    while(currentCharacter == nextCharacter){
                         counter++;
-                    } else {
-                        counter = 0;
+                        num++;
+                        currentCharacter = nextCharacter;
+                        nextCharacter = board[i + num][j + num];
+
+                        cout<<"Current: " << currentCharacter<<endl;
+                        cout<<"Next: " << nextCharacter<<endl;
+                        cout<<"Counter: " << counter<<endl;
+
+                        if (counter == 4) {
+                            wonPlayerSymbol = currentCharacter;
+                            return true;
+                        }
                     }
+                    counter = 0;
                 }
 
-                if (counter == 4) {
-                    wonPlayerSymbol = currentCharacter;
-                    return true;
-                }
+
             }
         }
     }
