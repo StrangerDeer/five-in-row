@@ -4,7 +4,7 @@
 using namespace std;
 
 int main() {
-    Game game(5, 10, 'X', 'Y');
+    Game game(10, 10, 'X', 'Y');
     game.run();
     return 0;
 }
