@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "Game.h"
 #include <algorithm>
 
@@ -26,14 +27,27 @@ void Game::initializeBoard() {
     }
 }
 
+void Game::printFirstLine(){
+    std::cout << "    ";
+    for(int i = 1; i <= numberOfColumns; i++){
+        std::cout << setw(4) << i;
+    }
+    std::cout<< "\n";
+}
+
 void Game::printBoard() {
-    for (const vector<char> &rows: board) {
-        for (char position: rows) {
-            std::cout << position << " ";
+    int i = 1;
+    printFirstLine();
+    for(const vector<char>& rows : board) {
+        std::cout << setw(4) << i;
+        for(char position : rows) {
+            std::cout << setw(4) << position;
         }
         std::cout << std::endl;
+        i++;
     }
 }
+
 
 void Game::mark(int x, int y) {
     board[y - 1][x - 1] = currentPlayer;

@@ -23,6 +23,7 @@ private:
     bool checkRange(int column, int row) const;
     void alternatePlayers();
     bool checkFieldAvailability(int column, int row);
+    void printFirstLine();
     void mark(int x, int y);
     bool getCoordinatesFromInput(const string& coordinates);
     void printBoard();
