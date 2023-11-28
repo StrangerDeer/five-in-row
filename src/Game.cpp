@@ -14,7 +14,7 @@ void Game::initializeBoard() {
     for (int i = 0; i < numberOfRows; i++) {
         vector<char> row = {};
         for (int j = 0; j < numberOfColumns; j++) {
-            row.push_back('.');
+            row.push_back(emptyField);
         }
         board.push_back(row);
     }
@@ -37,7 +37,7 @@ bool Game::checkFieldAvailability(int column, int row) {
     int columnIndex = column-1;
     int rowIndex = row-1;
     if(checkRange(column, row)){
-      if(board[columnIndex][rowIndex] == '.'){
+      if(board[columnIndex][rowIndex] == emptyField){
           return true;
       }
     }
@@ -54,4 +54,54 @@ bool Game::checkRange(int column, int row) {
 void Game::alternatePlayers() {
     if(currentPlayer == player1Symbol) currentPlayer = player2Symbol;
     else currentPlayer = player1Symbol;
+}
+
+void Game::setCheckerRange(int currentX, int currentY) {
+    if(currentX < minRowCoordinate){
+        minRowCoordinate = currentX;
+    }else if(currentX > maxColumnCoordinate){
+        maxRowCoordinate = currentX;
+    }
+
+    if(currentY < minColumnCoordinate){
+        minColumnCoordinate = currentY;
+    }else if(currentY > maxColumnCoordinate){
+        maxColumnCoordinate = currentY;
+    }
+}
+
+bool Game::hasRowFiveSameSymbol() {
+    int counter = 0;
+
+    for(int i = minRowCoordinate; i <= maxRowCoordinate; i++){
+        for(int j = minColumnCoordinate; j <= maxColumnCoordinate; j++){
+            char currentCharacter = board[i][j];
+            char nextCharacter = board[i][j + 1];
+
+            if(currentCharacter != emptyField){
+                if(currentCharacter == nextCharacter){
+                    counter++;
+                }else{
+                    counter = 0;
+                }
+            }
+
+            if(counter == 5){
+                wonPlayerSymbol = currentCharacter;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Game::hasWon(int currentX, int currentY) {
+    setCheckerRange(currentX, currentY);
+
+    if(hasRowFiveSameSymbol()){
+        return true;
+    }
+
+    return false;
 }
