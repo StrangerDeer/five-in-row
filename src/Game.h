@@ -15,6 +15,7 @@ private:
     bool checkRange(int column, int row);
     void alternatePlayers();
     bool checkFieldAvailability(int column, int row);
+    void printFirstLine();
 public:
     Game(int columns, int rows, char symbol1, char symbol2);
     void printBoard();

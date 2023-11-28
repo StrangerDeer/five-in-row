@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "Game.h"
 
 Game::Game(int columns, int rows, char symbol1, char symbol2) {
@@ -19,15 +20,28 @@ void Game::initializeBoard() {
         board.push_back(row);
     }
 }
+//todo: rename this func
+void Game::printFirstLine(){
+    std::cout << "    ";
+    for(int i = 1; i <= numberOfColumns; i++){
+        std::cout << setw(4) << i;
+    }
+    std::cout<< "\n";
+}
 
 void Game::printBoard() {
+    int i = 1;
+    printFirstLine();
     for(const vector<char>& rows : board) {
+        std::cout << setw(4) << i;
         for(char position : rows) {
-            std::cout << position << " ";
+            std::cout << setw(4) << position;
         }
         std::cout << std::endl;
+        i++;
     }
 }
+
 
 void Game::mark(int x, int y) {
     board[x - 1][y - 1] = currentPlayer;
