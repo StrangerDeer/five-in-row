@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Game.h"
+#include <algorithm>
+
 
 Game::Game(int columns, int rows, char symbol1, char symbol2) {
     numberOfColumns = columns;
@@ -21,8 +23,8 @@ void Game::initializeBoard() {
 }
 
 void Game::printBoard() {
-    for(const vector<char>& rows : board) {
-        for(char position : rows) {
+    for (const vector<char> &rows: board) {
+        for (char position: rows) {
             std::cout << position << " ";
         }
         std::cout << std::endl;
@@ -54,7 +56,7 @@ bool Game::checkRange(int column, int row) const {
 }
 
 void Game::alternatePlayers() {
-    if(currentPlayer == player1Symbol) currentPlayer = player2Symbol;
+    if (currentPlayer == player1Symbol) currentPlayer = player2Symbol;
     else currentPlayer = player1Symbol;
 }
 
@@ -92,4 +94,16 @@ void Game::run() {
         getPlayerInput();
         alternatePlayers();
     }
+}
+
+bool Game::isFull() {
+    char empty = '.';
+    for (auto & i : board) {
+        if (std::find(i.begin(), i.end(), empty) != i.end()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    return false;
 }

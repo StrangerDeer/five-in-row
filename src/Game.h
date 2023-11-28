@@ -19,6 +19,7 @@ private:
     bool getCoordinatesFromInput(const string& coordinates);
     void printBoard();
     void getPlayerInput();
+    bool isFull();
 public:
     Game(int columns, int rows, char symbol1, char symbol2);
     void run();
