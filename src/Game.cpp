@@ -84,19 +84,21 @@ bool Game::hasRowFiveSameSymbol() {
     for(int i = minRowCoordinate-1; i < maxRowCoordinate; i++){
         for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
             char currentCharacter = board[i][j];
-            char nextCharacter = board[i][j+1];
+            if (j+1 < maxColumnCoordinate) {
+                char nextCharacter = board[i][j + 1];
 
-            if(currentCharacter != emptyField){
-                if(currentCharacter == nextCharacter){
-                    counter++;
-                }else{
-                    counter = 0;
+                if (currentCharacter != emptyField) {
+                    if (currentCharacter == nextCharacter) {
+                        counter++;
+                    } else {
+                        counter = 0;
+                    }
                 }
-            }
 
-            if(counter == 4){
-                wonPlayerSymbol = currentCharacter;
-                return true;
+                if (counter == 4) {
+                    wonPlayerSymbol = currentCharacter;
+                    return true;
+                }
             }
         }
     }
@@ -106,23 +108,82 @@ bool Game::hasRowFiveSameSymbol() {
 bool Game::hasColumnSameSymbol() {
     int counter = 0;
 
+        for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
+            for(int i = minRowCoordinate-1; i < maxRowCoordinate; i++){
+            char currentCharacter = board[i][j];
+            if (i+1 < maxRowCoordinate) {
+                char nextCharacter = board[i + 1][j];
+
+                if (currentCharacter != emptyField) {
+                    if (currentCharacter == nextCharacter) {
+                        counter++;
+                    } else {
+                        counter = 0;
+                    }
+                }
+
+                if (counter == 4) {
+                    wonPlayerSymbol = currentCharacter;
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Game::hasRightDiagonalSameSymbol() {
+    int counter = 0;
+
     for(int i = minRowCoordinate-1; i < maxRowCoordinate; i++){
         for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
             char currentCharacter = board[i][j];
-            char nextCharacter = board[i + 1][j];
+            if (j+1 < maxColumnCoordinate && i+1 < maxRowCoordinate) {
+                char nextCharacter = board[i + 1][j + 1];
 
-            if(currentCharacter != emptyField){
-                if(currentCharacter == nextCharacter){
-                    counter++;
-                }else{
-                    counter = 0;
+                if (currentCharacter != emptyField) {
+                    if (currentCharacter == nextCharacter) {
+                        counter++;
+                    } else {
+                        counter = 0;
+                    }
+                }
+
+                if (counter == 4) {
+                    wonPlayerSymbol = currentCharacter;
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Game::hasLeftDiagonalSameSymbol() {
+    int counter = 0;
+
+    for(int i = minRowCoordinate-1; i < maxRowCoordinate; i++){
+        for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
+            char currentCharacter = board[i][j];
+            if (i+1 < maxRowCoordinate && j-1 > minColumnCoordinate) {
+                char nextCharacter = board[i + 1][j - 1];
+
+                if (currentCharacter != emptyField) {
+                    if (currentCharacter == nextCharacter) {
+                        counter++;
+                    } else {
+                        counter = 0;
+                    }
+                }
+
+                if (counter == 4) {
+                    wonPlayerSymbol = currentCharacter;
+                    return true;
                 }
             }
 
-            if(counter == 4){
-                wonPlayerSymbol = currentCharacter;
-                return true;
-            }
         }
     }
 
@@ -132,7 +193,10 @@ bool Game::hasColumnSameSymbol() {
 bool Game::hasWon() {
     setCheckerRange();
 
-    if(hasRowFiveSameSymbol() || hasColumnSameSymbol()){
+    if(hasRowFiveSameSymbol() ||
+        hasColumnSameSymbol() ||
+        hasRightDiagonalSameSymbol() ||
+        hasLeftDiagonalSameSymbol()){
         printBoard();
         cout << "Player " << wonPlayerSymbol << " has won!" << endl;
         return true;

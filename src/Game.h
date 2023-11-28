@@ -31,6 +31,8 @@ private:
     void setCheckerRange();
     bool hasRowFiveSameSymbol();
     bool hasColumnSameSymbol();
+    bool hasRightDiagonalSameSymbol();
+    bool hasLeftDiagonalSameSymbol();
     bool hasWon();
 public:
     Game(int columns, int rows, char symbol1, char symbol2);
