@@ -103,10 +103,36 @@ bool Game::hasRowFiveSameSymbol() {
     return false;
 }
 
+bool Game::hasColumnSameSymbol() {
+    int counter = 0;
+
+    for(int i = minRowCoordinate-1; i < maxRowCoordinate; i++){
+        for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
+            char currentCharacter = board[i][j];
+            char nextCharacter = board[i + 1][j];
+
+            if(currentCharacter != emptyField){
+                if(currentCharacter == nextCharacter){
+                    counter++;
+                }else{
+                    counter = 0;
+                }
+            }
+
+            if(counter == 4){
+                wonPlayerSymbol = currentCharacter;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 bool Game::hasWon() {
     setCheckerRange();
 
-    if(hasRowFiveSameSymbol()){
+    if(hasRowFiveSameSymbol() || hasColumnSameSymbol()){
         printBoard();
         cout << "Player " << wonPlayerSymbol << " has won!" << endl;
         return true;
