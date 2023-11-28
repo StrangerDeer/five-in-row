@@ -8,9 +8,17 @@ private:
     vector<vector<char>> board;
     int numberOfColumns;
     int numberOfRows;
+    int minRowCoordinate;
+    int maxRowCoordinate;
+    int minColumnCoordinate;
+    int maxColumnCoordinate;
+    char emptyField = '.';
     char player1Symbol;
     char player2Symbol;
     char currentPlayer;
+    char wonPlayerSymbol;
+    int lastColumnPlayed;
+    int lastRowPlayed;
     void initializeBoard();
     bool checkRange(int column, int row) const;
     void alternatePlayers();
@@ -21,9 +29,16 @@ private:
     void printBoard();
     void getPlayerInput();
     bool isFull();
+    void setCheckerRange();
+    bool hasRowFiveSameSymbol();
+    bool hasColumnSameSymbol();
+    bool hasRightDiagonalSameSymbol();
+    bool hasLeftDiagonalSameSymbol();
+    bool hasWon();
 public:
     Game(int columns, int rows, char symbol1, char symbol2);
     void run();
+
 };
 
 

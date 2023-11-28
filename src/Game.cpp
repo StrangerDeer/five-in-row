@@ -7,6 +7,10 @@
 Game::Game(int columns, int rows, char symbol1, char symbol2) {
     numberOfColumns = columns;
     numberOfRows = rows;
+    maxColumnCoordinate = 0;
+    minColumnCoordinate = 0;
+    maxRowCoordinate = 0;
+    minRowCoordinate = 0;
     player1Symbol = symbol1;
     player2Symbol = symbol2;
     currentPlayer = player1Symbol;
@@ -17,7 +21,7 @@ void Game::initializeBoard() {
     for (int i = 0; i < numberOfRows; i++) {
         vector<char> row = {};
         for (int j = 0; j < numberOfColumns; j++) {
-            row.push_back('.');
+            row.push_back(emptyField);
         }
         board.push_back(row);
     }
@@ -56,7 +60,7 @@ bool Game::checkFieldAvailability(int column, int row) {
     int columnIndex = column-1;
     int rowIndex = row-1;
     if(checkRange(column, row)){
-      if(board[rowIndex][columnIndex] == '.'){
+      if(board[rowIndex][columnIndex] == emptyField){
           return true;
       }
     }
@@ -77,6 +81,156 @@ void Game::alternatePlayers() {
     else currentPlayer = player1Symbol;
 }
 
+void Game::setCheckerRange() {
+    if(lastColumnPlayed < minColumnCoordinate){
+        minColumnCoordinate = lastColumnPlayed;
+    }else if(lastColumnPlayed > maxColumnCoordinate){
+        maxColumnCoordinate = lastColumnPlayed;
+    }
+
+    if(lastRowPlayed < minRowCoordinate){
+        minRowCoordinate = lastRowPlayed;
+    }else if(lastRowPlayed > maxRowCoordinate){
+        maxRowCoordinate = lastRowPlayed;
+    }
+}
+
+bool Game::hasRowFiveSameSymbol() {
+    int counter = 0;
+
+    for(int i = minRowCoordinate-1; i < maxRowCoordinate; i++){
+        for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
+            char currentCharacter = board[i][j];
+            if (j+1 < maxColumnCoordinate) {
+                char nextCharacter = board[i][j + 1];
+
+                if (currentCharacter != emptyField) {
+                    if (currentCharacter == nextCharacter) {
+                        counter++;
+                    } else {
+                        counter = 0;
+                    }
+                }
+
+                if (counter == 4) {
+                    wonPlayerSymbol = currentCharacter;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::hasColumnSameSymbol() {
+    int counter = 0;
+
+        for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
+            for(int i = minRowCoordinate-1; i < maxRowCoordinate; i++){
+            char currentCharacter = board[i][j];
+            if (i+1 < maxRowCoordinate) {
+                char nextCharacter = board[i + 1][j];
+
+                if (currentCharacter != emptyField) {
+                    if (currentCharacter == nextCharacter) {
+                        counter++;
+                    } else {
+                        counter = 0;
+                    }
+                }
+
+                if (counter == 4) {
+                    wonPlayerSymbol = currentCharacter;
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Game::hasRightDiagonalSameSymbol() {
+    int counter = 0;
+
+    for(int i = minRowCoordinate-1; i < maxRowCoordinate; i++){
+        for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
+            char currentCharacter = board[i][j];
+            if (j+1 < maxColumnCoordinate && i+1 < maxRowCoordinate) {
+                int num = 1;
+                char nextCharacter = board[i + num][j + num];
+
+                if (currentCharacter != emptyField) {
+                    while(currentCharacter == nextCharacter){
+                        counter++;
+                        num++;
+                        currentCharacter = nextCharacter;
+                        nextCharacter = board[i + num][j + num];
+
+                        cout<<"Current: " << currentCharacter<<endl;
+                        cout<<"Next: " << nextCharacter<<endl;
+                        cout<<"Counter: " << counter<<endl;
+
+                        if (counter == 4) {
+                            wonPlayerSymbol = currentCharacter;
+                            return true;
+                        }
+                    }
+                    counter = 0;
+                }
+
+
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Game::hasLeftDiagonalSameSymbol() {
+    int counter = 0;
+
+    for(int i = minRowCoordinate-1; i < maxRowCoordinate; i++){
+        for(int j = minColumnCoordinate-1; j < maxColumnCoordinate; j++){
+            char currentCharacter = board[i][j];
+            if (i+1 < maxRowCoordinate && j-1 > minColumnCoordinate) {
+                char nextCharacter = board[i + 1][j - 1];
+
+                if (currentCharacter != emptyField) {
+                    if (currentCharacter == nextCharacter) {
+                        counter++;
+                    } else {
+                        counter = 0;
+                    }
+                }
+
+                if (counter == 4) {
+                    wonPlayerSymbol = currentCharacter;
+                    return true;
+                }
+            }
+
+        }
+    }
+
+    return false;
+}
+
+bool Game::hasWon() {
+    setCheckerRange();
+
+    if(hasRowFiveSameSymbol() ||
+        hasColumnSameSymbol() ||
+        hasRightDiagonalSameSymbol() ||
+        hasLeftDiagonalSameSymbol()){
+        printBoard();
+        cout << "Player " << wonPlayerSymbol << " has won!" << endl;
+        return true;
+    }
+
+    return false;
+}
+
 bool Game::getCoordinatesFromInput(const string& coordinates) {
     string::size_type loc = coordinates.find( '-', 0 );
     if( loc != string::npos )
@@ -86,6 +240,8 @@ bool Game::getCoordinatesFromInput(const string& coordinates) {
 
         if (checkRange(coor1, coor2) && checkFieldAvailability(coor1, coor2)) {
             mark(coor1, coor2);
+            lastColumnPlayed = coor1;
+            lastRowPlayed = coor2;
             return true;
         }
     } else {
@@ -104,15 +260,6 @@ void Game::getPlayerInput() {
     }
 }
 
-void Game::run() {
-    bool isRunning = true;
-
-    while (isRunning) {
-        printBoard();
-        getPlayerInput();
-        alternatePlayers();
-    }
-}
 
 bool Game::isFull() {
     char empty = '.';
@@ -124,4 +271,27 @@ bool Game::isFull() {
         }
     }
     return false;
+}
+
+
+void Game::run() {
+    bool isRunning = true;
+    int stepCounter = 0;
+
+    while (isRunning) {
+        printBoard();
+        getPlayerInput();
+        if(stepCounter == 0){
+            minRowCoordinate = lastRowPlayed;
+            maxRowCoordinate = lastRowPlayed;
+            minColumnCoordinate = lastColumnPlayed;
+            maxColumnCoordinate = lastColumnPlayed;
+        }
+        stepCounter++;
+        if (hasWon()) {
+            break;
+        }
+        isFull();
+        alternatePlayers();
+    }
 }
