@@ -4,7 +4,8 @@
 using namespace std;
 
 int main() {
-    Game game(10, 4, 'X', 'Y');
+    std::cout << "";
+    Game game(10, 10, 'X', 'Y');
     game.run();
     return 0;
 }
