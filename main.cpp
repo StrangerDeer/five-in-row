@@ -4,8 +4,7 @@
 using namespace std;
 
 int main() {
-    Game game(5, 10, 'Y', 'X');
-    game.mark(2,2);
-    game.printBoard();
+    Game game(10, 4, 'X', 'Y');
+    game.run();
     return 0;
 }
