@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Game.h"
+#include <algorithm>
+
 
 Game::Game(int columns, int rows, char symbol1, char symbol2) {
     numberOfColumns = columns;
@@ -21,8 +23,8 @@ void Game::initializeBoard() {
 }
 
 void Game::printBoard() {
-    for(const vector<char>& rows : board) {
-        for(char position : rows) {
+    for (const vector<char> &rows: board) {
+        for (char position: rows) {
             std::cout << position << " ";
         }
         std::cout << std::endl;
@@ -34,24 +36,36 @@ void Game::mark(int x, int y) {
 }
 
 bool Game::checkFieldAvailability(int column, int row) {
-    int columnIndex = column-1;
-    int rowIndex = row-1;
-    if(checkRange(column, row)){
-      if(board[columnIndex][rowIndex] == '.'){
-          return true;
-      }
+    int columnIndex = column - 1;
+    int rowIndex = row - 1;
+    if (checkRange(column, row)) {
+        if (board[columnIndex][rowIndex] == '.') {
+            return true;
+        }
     }
-        return false;
+    return false;
 }
 
 bool Game::checkRange(int column, int row) {
-    if(column <= numberOfColumns && column > 0 && row <= numberOfRows && row > 0){
+    if (column <= numberOfColumns && column > 0 && row <= numberOfRows && row > 0) {
         return true;
     }
     return false;
 }
 
 void Game::alternatePlayers() {
-    if(currentPlayer == player1Symbol) currentPlayer = player2Symbol;
+    if (currentPlayer == player1Symbol) currentPlayer = player2Symbol;
     else currentPlayer = player1Symbol;
+}
+
+bool Game::isFull() {
+    char empty = '.';
+    for (auto & i : board) {
+        if (std::find(i.begin(), i.end(), empty) != i.end()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    return false;
 }
