@@ -36,6 +36,7 @@ void Game::printFirstLine(){
 }
 
 void Game::printBoard() {
+    system("Color 9");
     int i = 1;
     printFirstLine();
     for(const vector<char>& rows : board) {
@@ -46,6 +47,8 @@ void Game::printBoard() {
         std::cout << std::endl;
         i++;
     }
+    cout << endl;
+
 }
 
 
@@ -242,6 +245,7 @@ void Game::getPlayerInput() {
     cout << "Coordinates: ";
     string input;
     cin >> input;
+    cout << endl;
     if (!getCoordinatesFromInput(input)) {
         getPlayerInput();
     }
