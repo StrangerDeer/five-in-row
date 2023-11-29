@@ -260,14 +260,18 @@ bool Game::getCoordinatesFromInput(const string& coordinates) {
     string::size_type loc = coordinates.find( '-', 0 );
     if( loc != string::npos )
     {
-        int coor1 = stoi(coordinates.substr(0, loc));
-        int coor2 = stoi(coordinates.substr (loc + 1));
+        string c1 = coordinates.substr(0, loc);
+        string c2 = coordinates.substr (loc + 1);
 
-        if (checkRange(coor1, coor2) && checkFieldAvailability(coor1, coor2)) {
-            mark(coor1, coor2);
-            lastColumnPlayed = coor1;
-            lastRowPlayed = coor2;
-            return true;
+        if (isConvertibleToInt(c1) && isConvertibleToInt(c2)) {
+            int coord1 = stoi(c1);
+            int coord2 = stoi(c2);
+            if (checkRange(coord1, coord2) && checkFieldAvailability(coord1, coord2)) {
+                mark(coord1, coord2);
+                lastColumnPlayed = coord1;
+                lastRowPlayed = coord2;
+                return true;
+            }
         }
     } else {
         cout << "Invalid coordinates" << endl;
@@ -275,13 +279,26 @@ bool Game::getCoordinatesFromInput(const string& coordinates) {
     return false;
 }
 
-void Game::getPlayerInput() {
+bool Game::isConvertibleToInt(const std::string& str) {
+    bool result = false;
+    try {
+        std::stoi(str);
+        result = true;
+    } catch (...) {
+        cout << "Invalid coordinates" << endl;
+    }
+    return result;
+}
+
+void Game::getPlayerInput(bool& isRunning) {
     cout << "Coordinates: ";
     string input;
     cin >> input;
     cout << endl;
-    if (!getCoordinatesFromInput(input)) {
-        getPlayerInput();
+    if (input == "quit" || input == "q") {
+        isRunning = false;
+    } else if (!getCoordinatesFromInput(input)) {
+        getPlayerInput(isRunning);
     }
 }
 
@@ -305,7 +322,7 @@ void Game::run() {
 
     while (isRunning) {
         printBoard();
-        getPlayerInput();
+        getPlayerInput(isRunning);
         if(stepCounter == 0){
             minRowCoordinate = lastRowPlayed;
             maxRowCoordinate = lastRowPlayed;
