@@ -27,7 +27,7 @@ private:
     void mark(int x, int y);
     bool getCoordinatesFromInput(const string& coordinates);
     void printBoard();
-    void getPlayerInput();
+    void getPlayerInput(bool& isRunning);
     bool isFull();
     void setCheckerRange();
     bool hasRowFiveSameSymbol();
@@ -35,6 +35,8 @@ private:
     bool hasRightDiagonalSameSymbol();
     bool hasLeftDiagonalSameSymbol();
     bool hasWon();
+    bool isConvertibleToInt(const std::string& str);
+
 public:
     Game(int columns, int rows, char symbol1, char symbol2);
     void run();
