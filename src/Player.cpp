@@ -3,9 +3,15 @@
 //
 
 #include "Player.h"
-Player::Player(string name, char symbol) {
-    name = name;
-    symbol = symbol;
-}
+
+#include <utility>
 
 Player::Player() = default;
+
+void Player::setUsername(string username) {
+    name = std::move(username);
+}
+
+void Player::setSymbol(char symbol) {
+    Player::symbol = symbol;
+}

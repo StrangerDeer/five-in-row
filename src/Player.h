@@ -14,9 +14,10 @@ class Player {
 
 public:
     string name;
-    char symbol{};
+    char symbol;
     Player();
-    Player(string name, char symbol);
+    void setUsername(string username);
+    void setSymbol(char symbol);
 };
 
 
