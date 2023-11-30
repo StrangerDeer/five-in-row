@@ -8,17 +8,16 @@ string GameMessage::turnRoundMessage(const string &username) {
     return username + "'s round";
 }
 
-string GameMessage::wonMessage(const char& wonPlayerSymbol) {
-    string symbol(1, wonPlayerSymbol);
-    return "Player " + symbol + " has won!";
+string GameMessage::wonMessage(const string& winningPlayerName) {
+    return winningPlayerName + " has won!";
 }
 
 string GameMessage::nameQuestion(const int &number) {
-    return "What is the player " + to_string(number) + " name?";
+    return "What is the player " + to_string(number) + "'s name?";
 }
 
 string GameMessage::typeSymbolMessage(const string &name) {
-    return name + " please type a symbol!";
+    return name + " please choose a symbol!";
 }
 
 string GameMessage::getFirstPlayer(const string &name, const char &symbol) {

@@ -211,7 +211,11 @@ bool Game::hasWon() {
         hasRightDiagonalSameSymbol() ||
         hasLeftDiagonalSameSymbol()){
         printBoard();
-        logger.log(message.wonMessage(wonPlayerSymbol));
+        if (wonPlayerSymbol == player1.symbol) {
+            logger.log(message.wonMessage(player1.name));
+        } else if (wonPlayerSymbol == player2.symbol) {
+            logger.log(message.wonMessage(player2.name));
+        }
         return true;
     }
 
