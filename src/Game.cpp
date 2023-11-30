@@ -4,17 +4,12 @@
 #include <algorithm>
 
 
-Game::Game(int columns, int rows, char symbol1, char symbol2) {
-    numberOfColumns = columns;
-    numberOfRows = rows;
+Game::Game() {
     maxColumnCoordinate = 0;
     minColumnCoordinate = 0;
     maxRowCoordinate = 0;
     minRowCoordinate = 0;
-    player1Symbol = symbol1;
-    player2Symbol = symbol2;
     currentPlayer = player1Symbol;
-    initializeBoard();
 }
 
 void Game::initializeBoard() {
@@ -64,7 +59,7 @@ bool Game::checkFieldAvailability(int column, int row) {
           return true;
       }
     }
-    cout << "Coordinate is already taken" << endl;
+    logger.log("Coordinate is already taken");
     return false;
 }
 
@@ -72,7 +67,7 @@ bool Game::checkRange(int column, int row) const {
     if(column <= numberOfColumns && column > 0 && row <= numberOfRows && row > 0){
         return true;
     }
-    cout << "Coordinate is out of board range" << endl;
+    logger.log("Coordinate is out of board range");
     return false;
 }
 
@@ -86,31 +81,6 @@ void Game::setCheckerRange() {
     minRowCoordinate = 1;
     maxColumnCoordinate = numberOfColumns;
     maxRowCoordinate = numberOfRows;
-
-
-    /*if(lastColumnPlayed < minColumnCoordinate){
-        minColumnCoordinate = lastColumnPlayed;
-        if (minColumnCoordinate > 1) {
-            minColumnCoordinate = lastColumnPlayed-1;
-        }
-    }else if(lastColumnPlayed > maxColumnCoordinate){
-        maxColumnCoordinate = lastColumnPlayed;
-        if (maxColumnCoordinate < numberOfColumns) {
-            maxColumnCoordinate = lastColumnPlayed+1;
-        }
-    }
-
-    if(lastRowPlayed < minRowCoordinate){
-        minRowCoordinate = lastRowPlayed;
-        if (minRowCoordinate > 1) {
-            minRowCoordinate = lastRowPlayed-1;
-        }
-    }else if(lastRowPlayed > maxRowCoordinate){
-        maxRowCoordinate = lastRowPlayed;
-        if (maxRowCoordinate < numberOfRows) {
-            maxRowCoordinate = lastRowPlayed+1;
-        }
-    }*/
 }
 
 bool Game::hasRowFiveSameSymbol() {
@@ -257,7 +227,7 @@ bool Game::hasWon() {
 }
 
 bool Game::getCoordinatesFromInput(const string& coordinates) {
-    string::size_type loc = coordinates.find( '-', 0 );
+    string::size_type loc = coordinates.find( coordinateSeparator, 0 );
     if( loc != string::npos )
     {
         string c1 = coordinates.substr(0, loc);
@@ -272,30 +242,31 @@ bool Game::getCoordinatesFromInput(const string& coordinates) {
                 lastRowPlayed = coord2;
                 return true;
             }
+        } else {
+            logger.log("Invalid coordinates");
         }
     } else {
-        cout << "Invalid coordinates" << endl;
+        logger.log("Invalid coordinates");
     }
     return false;
 }
 
 bool Game::isConvertibleToInt(const std::string& str) {
-    bool result = false;
     try {
         std::stoi(str);
-        result = true;
+        return true;
     } catch (...) {
-        cout << "Invalid coordinates" << endl;
+        return false;
     }
-    return result;
 }
 
 void Game::getPlayerInput(bool& isRunning) {
-    cout << "Coordinates: ";
+    logger.log("Coordinates: ");
     string input;
     cin >> input;
     cout << endl;
-    if (input == "quit" || input == "q") {
+    if (find(quitMessages.begin(), quitMessages.end(), input) != quitMessages.end()) {
+        logger.log("Good Bye");
         isRunning = false;
     } else if (!getCoordinatesFromInput(input)) {
         getPlayerInput(isRunning);
@@ -304,9 +275,8 @@ void Game::getPlayerInput(bool& isRunning) {
 
 
 bool Game::isFull() {
-    char empty = '.';
     for (auto & i : board) {
-        if (std::find(i.begin(), i.end(), empty) != i.end()) {
+        if (std::find(i.begin(), i.end(), emptyField) != i.end()) {
             return false;
         } else {
             return true;
@@ -315,20 +285,64 @@ bool Game::isFull() {
     return false;
 }
 
+void Game::startGame() {
+        string userInput;
+        logger.log("Hello");
+        logger.log("How many columns do you want?");
+        cin >> userInput;
+
+        while(!isConvertibleToInt(userInput)){
+            logger.log("It is not a number");
+            logger.log("Please give me a number");
+            cin >> userInput;
+        }
+
+        numberOfColumns = stoi(userInput);
+
+        logger.log("How many rows do you want?");
+        cin >> userInput;
+
+        while(!isConvertibleToInt(userInput)){
+            logger.log("It is not a number");
+            logger.log("Please give me a number");
+            cin >> userInput;
+        }
+
+        numberOfRows = stoi(userInput);
+
+        string username;
+        char symbol;
+
+        logger.log("What is the player 1 name?");
+        cin>> userInput;
+        username = userInput;
+        logger.log(username + " please type a symbol!");
+        cin >> userInput;
+        symbol = userInput.at(0);
+        player1 = new Player(username, symbol);
+
+        logger.log("What is the player 2 name?");
+        cin>> userInput;
+        username = userInput;
+        logger.log(username + " please type a symbol!");
+        cin >> userInput;
+        symbol = userInput.at(0);
+        player2 = new Player(username, symbol);
+
+        logger.log("First player: " + player1.name + " with " + player1.symbol);
+        logger.log("Second player: " + player2.name + " with " + player2.symbol);
+        logger.log("Start: " + player1.name);
+        initializeBoard();
+}
 
 void Game::run() {
+    startGame();
     bool isRunning = true;
     int stepCounter = 0;
 
     while (isRunning) {
         printBoard();
         getPlayerInput(isRunning);
-        if(stepCounter == 0){
-            minRowCoordinate = lastRowPlayed;
-            maxRowCoordinate = lastRowPlayed;
-            minColumnCoordinate = lastColumnPlayed;
-            maxColumnCoordinate = lastColumnPlayed;
-        }
         stepCounter++;
         if (hasWon()) {
             break;

@@ -2,23 +2,32 @@
 #define CPP_FIVE_IN_A_ROW_GAME_H
 
 #include <vector>
+#include "Logger.h"
+#include "Player.h"
+
 using namespace std;
+
 class Game {
 private:
     vector<vector<char>> board;
-    int numberOfColumns;
-    int numberOfRows;
+    Player player1;
+    Player player2;
+    int numberOfColumns{};
+    int numberOfRows{};
     int minRowCoordinate;
     int maxRowCoordinate;
     int minColumnCoordinate;
     int maxColumnCoordinate;
     char emptyField = '.';
-    char player1Symbol;
-    char player2Symbol;
+    char coordinateSeparator = '-';
+    vector<string> quitMessages = {"quit", "q"};
+    char player1Symbol{};
+    char player2Symbol{};
     char currentPlayer;
-    char wonPlayerSymbol;
-    int lastColumnPlayed;
-    int lastRowPlayed;
+    char wonPlayerSymbol{};
+    int lastColumnPlayed{};
+    int lastRowPlayed{};
+    Logger logger;
     void initializeBoard();
     bool checkRange(int column, int row) const;
     void alternatePlayers();
@@ -36,9 +45,10 @@ private:
     bool hasLeftDiagonalSameSymbol();
     bool hasWon();
     bool isConvertibleToInt(const std::string& str);
+    void startGame();
 
 public:
-    Game(int columns, int rows, char symbol1, char symbol2);
+    Game();
     void run();
 
 };
