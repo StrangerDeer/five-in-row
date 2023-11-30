@@ -10,4 +10,6 @@ add_executable(cpp_five_in_a_row main.cpp
         src/Logger.h
         src/Player.cpp
         src/Player.h
+        src/GameMessage.cpp
+        src/GameMessage.h
 )
